@@ -65,8 +65,7 @@ class NoteTypeGroup(ModelSQL):
         Rule._domain_get_cache.clear()
 
 
-class Note:
-    __metaclass__ = PoolMeta
+class Note(metaclass=PoolMeta):
     __name__ = 'ir.note'
 
     type_ = fields.Selection('get_type_code', 'Type')
@@ -105,7 +104,7 @@ class Note:
             code2note[note.type_].append(note.id)
 
         note_types = NoteType.search([
-                ('code', 'in', code2note.keys()),
+                ('code', 'in', list(code2note.keys())),
                 ])
 
         groups = defaultdict(list)
