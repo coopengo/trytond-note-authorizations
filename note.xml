@@ -52,6 +52,7 @@ this repository contains the full copyright notices and license terms. -->
         <!-- # Read rule for notes # -->
         <!-- ####################### -->
         <record model="ir.rule.group" id="rule_group_note">
+            <field name="name">Own note or no type</field>
             <field name="model" search="[('model', '=', 'ir.note')]"/>
             <field name="global_p" eval="True"/>
             <field name="perm_read" eval="True"/>
