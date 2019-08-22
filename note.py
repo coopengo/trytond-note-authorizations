@@ -26,9 +26,10 @@ class NoteType(ModelSQL, ModelView):
     @classmethod
     def search(cls, domain, *args, **kwargs):
         # Filter out everything the user is not allowed to view
-        user = Pool().get('res.user')(Transaction().user)
-        domain = ['AND', domain,
-            [('groups', 'in', [x.id for x in user.groups])]]
+        if Transaction().user != 0:
+            user = Pool().get('res.user')(Transaction().user)
+            domain = ['AND', domain,
+                [('groups', 'in', [x.id for x in user.groups])]]
         return super(NoteType, cls).search(domain, *args, **kwargs)
 
 
