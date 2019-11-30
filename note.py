@@ -29,7 +29,9 @@ class NoteType(ModelSQL, ModelView):
         if Transaction().user != 0:
             user = Pool().get('res.user')(Transaction().user)
             domain = ['AND', domain,
-                [('groups', 'in', [x.id for x in user.groups])]]
+                ['OR',
+                    ('groups', 'in', [x.id for x in user.groups]),
+                    ('groups', '=', None)]]
         return super(NoteType, cls).search(domain, *args, **kwargs)
 
 
