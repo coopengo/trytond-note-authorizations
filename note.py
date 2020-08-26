@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from collections import defaultdict
 
+from trytond.pyson import Bool, Eval
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.model import fields, ModelSQL, ModelView
@@ -27,9 +28,16 @@ class NoteType(ModelSQL, ModelView):
     def search(cls, domain, *args, **kwargs):
         # Filter out everything the user is not allowed to view
         user = Pool().get('res.user')(Transaction().user)
-        domain = ['AND', domain,
-            [('groups', 'in', [x.id for x in user.groups])]]
-        return super(NoteType, cls).search(domain, *args, **kwargs)
+        if Transaction().user != 0:
+            domain = ['AND', domain,
+                ['OR',
+                    ('groups', 'in', [x.id for x in user.groups]),
+                    ('groups', '=', None)]]
+        res = super(NoteType, cls).search(domain, *args, **kwargs)
+        if Transaction().user == 0:
+            return res
+        return [r for r in res if not r.groups or
+            all(x in user.groups for x in r.groups)]
 
 
 class NoteTypeGroup(ModelSQL):
@@ -65,11 +73,12 @@ class NoteTypeGroup(ModelSQL):
         Rule._domain_get_cache.clear()
 
 
-class Note:
-    __metaclass__ = PoolMeta
+class Note(metaclass=PoolMeta):
     __name__ = 'ir.note'
 
-    type_ = fields.Selection('get_type_code', 'Type')
+    type_ = fields.Selection('get_type_code', 'Type',
+        states={'readonly':
+            Bool(Eval('type_') & Bool(Eval('id', 0) > 0))},)
     groups = fields.Function(
         fields.Many2Many('res.group', None, None, 'User Groups'),
         'get_groups', searcher='search_groups')
@@ -105,7 +114,7 @@ class Note:
             code2note[note.type_].append(note.id)
 
         note_types = NoteType.search([
-                ('code', 'in', code2note.keys()),
+                ('code', 'in', list(code2note.keys())),
                 ])
 
         groups = defaultdict(list)

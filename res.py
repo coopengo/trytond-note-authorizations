@@ -10,16 +10,14 @@ __all__ = [
     ]
 
 
-class Group:
-    __metaclass__ = PoolMeta
+class Group(metaclass=PoolMeta):
     __name__ = 'res.group'
 
     note_types = fields.Many2Many('ir.note.type-res.group', 'group', 'type_',
         'Note Types')
 
 
-class User:
-    __metaclass__ = PoolMeta
+class User(metaclass=PoolMeta):
     __name__ = 'res.user'
 
     note_types = fields.Function(

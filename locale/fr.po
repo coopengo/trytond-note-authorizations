@@ -35,7 +35,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:ir.note.type,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:ir.note.type,write_date:"
@@ -63,7 +63,7 @@ msgid "ID"
 msgstr "Identifiant"
 
 msgctxt "field:ir.note.type-res.group,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:ir.note.type-res.group,type_:"
@@ -97,6 +97,10 @@ msgstr "Type de note"
 msgctxt "model:ir.note.type-res.group,name:"
 msgid "Note Type Group relation"
 msgstr "Relation Type de note - Groupe"
+
+msgctxt "model:ir.rule.group,name:rule_group_note"
+msgid "Own note or no type"
+msgstr "Propre note ou sans type"
 
 msgctxt "model:ir.ui.menu,name:menu_note_type"
 msgid "Note Type"

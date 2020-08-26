@@ -52,12 +52,13 @@ this repository contains the full copyright notices and license terms. -->
         <!-- # Read rule for notes # -->
         <!-- ####################### -->
         <record model="ir.rule.group" id="rule_group_note">
+            <field name="name">Own note or no type</field>
             <field name="model" search="[('model', '=', 'ir.note')]"/>
             <field name="global_p" eval="True"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_write" eval="True"/>
-            <field name="perm_delete" eval="True"/>
+            <field name="perm_delete" eval="False"/>
         </record>
         <record model="ir.rule" id="rule_note">
             <field name="domain" eval="['OR', ('type_', 'in', ['', None]), ('groups', 'in', Eval('user', {}).get('groups', []))]" pyson="1"/>
